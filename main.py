@@ -1,5 +1,6 @@
 import numpy as np
 
+
 SYMBOLS = {0: " ", 1: "X", -1: "O"}
 
 

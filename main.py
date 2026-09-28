@@ -50,4 +50,27 @@ while True:
     except ValueError:
         print("Please enters number only \n")
         continue
+
+    if row < 0 or row>3 or col <0 or col>3:
+        print("Row and Coiumn must be between 0 and 2")
+
+    if board[row,col] != 0:
+        print("Cell is already taken")
+
+    board[row,col] = current
+    print_board(board)
+
+    result = check_winner(board)
+
+    if result is not None:
+        if result =="DRAW":
+            print("WOW! Its a draw")
+        else:
+            print(result,"wins")
+
+        break
     
+
+
+
+

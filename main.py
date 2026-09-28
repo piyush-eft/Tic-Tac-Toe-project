@@ -1,75 +1,67 @@
 import numpy as np
 
-board = np.zeros((3,3),dtype=int)
+SYMBOLS = {0: " ", 1: "X", -1: "O"}
 
 
 def print_board(b):
-    symbols = {0: " ", 1: "X", -1:"O"}
     for r in range(3):
-        row = " | ".join(symbols[val] for val in b[r])
-        print(" "+ row)
-        if r<2:
+        print(" " + " | ".join(SYMBOLS[val] for val in b[r]))
+        if r < 2:
             print("---+---+---")
     print()
 
+
 def check_winner(b):
-    if 3 in np.sum(b,axis=1) or 3 in np.sum(b,axis=0):
+    # Every line's sum: 3 rows, 3 columns, 2 diagonals
+    lines = list(b.sum(axis=1)) + list(b.sum(axis=0)) + [np.trace(b), np.trace(np.fliplr(b))]
+
+    if 3 in lines:
         return "X"
-    
-    if -3 in np.sum(b,axis=1) or -3 in np.sum(b,axis=0):
+    if -3 in lines:
         return "O"
-    
-    if np.trace(b)==3 or np.trace(np.fliplr(b))==3:
-        return "X"
-    
-    if np.trace(b)==-3 or np.trace(np.fliplr(b))==-3:
-        return "O"
-    
-    if not 0 in b:
+    if not (b == 0).any():
         return "DRAW"
-    
     return None
 
-current = 1
 
-print("Welcome to the tic tac toe game")
+def main():
+    board = np.zeros((3, 3), dtype=int)
+    current = 1  # 1 = X, -1 = O
 
-print_board(board)
-
-while True:
-
-    if current==1:
-        player ="X"
-    else:
-        player ="O"
-
-    try:
-        row = int(input(player + "- Enter row (0,1,2)"))
-        col = int(input(player + "- Enter column (0,1,2)"))
-    except ValueError:
-        print("Please enters number only \n")
-        continue
-
-    if row < 0 or row>3 or col <0 or col>3:
-        print("Row and Coiumn must be between 0 and 2")
-
-    if board[row,col] != 0:
-        print("Cell is already taken")
-
-    board[row,col] = current
+    print("Welcome to the tic tac toe game")
     print_board(board)
 
-    result = check_winner(board)
+    while True:
+        player = "X" if current == 1 else "O"
 
-    if result is not None:
-        if result =="DRAW":
-            print("WOW! Its a draw")
-        else:
-            print(result,"wins")
+        try:
+            row = int(input(f"{player} - Enter row (0,1,2): "))
+            col = int(input(f"{player} - Enter column (0,1,2): "))
+        except ValueError:
+            print("Please enter numbers only.\n")
+            continue
 
-        break
+        if not (0 <= row <= 2 and 0 <= col <= 2):
+            print("Row and column must be between 0 and 2.\n")
+            continue
 
-    if current == 1:
-        current = -1
-    else:
-        current = 1
+        if board[row, col] != 0:
+            print("Cell is already taken.\n")
+            continue
+
+        board[row, col] = current
+        print_board(board)
+
+        result = check_winner(board)
+        if result == "DRAW":
+            print("WOW! It's a draw")
+            break
+        if result is not None:
+            print(result, "wins")
+            break
+
+        current = -current
+
+
+if __name__ == "__main__":
+    main()

@@ -31,6 +31,23 @@ def check_winner(b):
     
     return None
 
+current = 1
 
+print("Welcome to the tic tac toe game")
 
 print_board(board)
+
+while True:
+
+    if current==1:
+        player ="X"
+    else:
+        player ="O"
+
+    try:
+        row = int(input(player + "- Enter row (0,1,2)"))
+        col = int(input(player + "- Enter column (0,1,2)"))
+    except ValueError:
+        print("Please enters number only \n")
+        continue
+    
